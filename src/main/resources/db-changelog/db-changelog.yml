@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db-changelog/base-tables/create-role-table.sql
+  - include:
+      file: classpath:/db-changelog/base-tables/create-user-table.sql
+  - include:
+      file: classpath:/db-changelog/base-tables/create-text-table.sql
+  - include:
+      file: classpath:/db-changelog/base-tables/init-users.sql
