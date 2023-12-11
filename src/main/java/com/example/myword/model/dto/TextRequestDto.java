@@ -8,5 +8,4 @@ import lombok.Data;
 public class TextRequestDto {
     private String title;
     private String content;
-    private String creator;
 }

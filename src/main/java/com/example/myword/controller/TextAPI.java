@@ -2,13 +2,11 @@ package com.example.myword.controller;
 
 import com.example.myword.model.dto.TextDto;
 import com.example.myword.model.dto.TextRequestDto;
-import com.example.myword.model.entity.User;
 import com.example.myword.service.TextService;
 import com.example.myword.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -33,9 +31,10 @@ public class TextAPI {
         return textService.getUserTexts(principal);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public ResponseEntity<TextDto> addNewText(@RequestBody TextRequestDto textRequestDto) {
-        return textService.createNewText(textRequestDto);
+    public ResponseEntity<TextDto> addNewText(@RequestBody TextRequestDto textRequestDto, Principal principal) {
+        return textService.createNewText(textRequestDto, principal);
     }
 
 }

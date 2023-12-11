@@ -5,6 +5,7 @@ create table t_texts
     s3Key text,
     title   varchar(255) not null,
     url     varchar(255) not null,
+    views bigint,
     primary key (id)
 );
 

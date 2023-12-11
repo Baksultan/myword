@@ -68,21 +68,26 @@ public class TextService {
     }
 
 
-    public ResponseEntity<TextDto> createNewText(TextRequestDto textRequestDto) {
+    public ResponseEntity<TextDto> createNewText(TextRequestDto textRequestDto, Principal principal) {
         String s3Key = UUID.randomUUID().toString();
         byte[] content = textRequestDto.getContent().getBytes();
         s3Service.putObject("myword-bucket", s3Key, content);
 
-        Text text = Text.builder()
-                .title(textRequestDto.getTitle())
-                .s3Key(s3Key)
-                .creator(userRepo.findByUsername(textRequestDto.getCreator()).get())
-                .views(0L)
-                .build();
-        Text t = textRepo.save(text);
-        if (t.getId() != null && t.getCreator()!=null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(textMapper.toDto(t));
+        User creator = userRepo.findByUsername(principal.getName()).orElse(null);
+
+        if (creator != null) {
+            Text text = Text.builder()
+                    .title(textRequestDto.getTitle())
+                    .s3Key(s3Key)
+                    .creator(creator)
+                    .views(0L)
+                    .build();
+            Text t = textRepo.save(text);
+            if (t.getId() != null && t.getCreator()!=null) {
+                return ResponseEntity.status(HttpStatus.CREATED).body(textMapper.toDto(t));
+            }
         }
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
